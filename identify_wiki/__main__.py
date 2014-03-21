@@ -1,4 +1,3 @@
-import os
 import sys
 from argparse import ArgumentParser
 from multiprocessing import Pool
@@ -28,13 +27,9 @@ def identify_worker(wid):
 
 
 def get_args():
-    topwams = os.path.join(
-        os.path.abspath(os.path.dirname(__file__)), 'topwams.txt')
-
     parser = ArgumentParser()
     parser.add_argument(
         '-i', '--input', dest='input', type=str, action='store',
-        default=topwams,
         help='Input file containing newline-separated wiki IDs')
     parser.add_argument(
         '-o', '--output', dest='output', type=str, action='store',
