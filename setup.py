@@ -9,5 +9,5 @@ setup(
     license='Other',
     packages=['identify_wiki'],
     install_requires=['nlp_services>=0.0.1', 'requests', 'nltk', 'beautifulsoup4'],
-    dependency_links=[ 'https://github.com/relwell/nlp_services/archive/master.zip#egg=nlp_services-0.0.1']
+    dependency_links=['https://github.com/tristaneuan/nlp_services/archive/master.zip#egg=nlp_services-0.0.1']
     )
