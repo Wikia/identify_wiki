@@ -1,1 +1,0 @@
--e git+https://github.com/tristaneuan/nlp_services.git#egg=nlp_services-0.0.2
