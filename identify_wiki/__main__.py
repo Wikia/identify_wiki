@@ -56,5 +56,20 @@ def main():
     total = end - start
     print '%d seconds elapsed' % total
 
+
+def nonasync_main():
+    args = get_args()
+
+    start = time()
+    with open(args.output, 'w') as f:
+        wids = [line.strip() for line in
+                open(args.input).readlines()[:args.number]]
+        for wid in wids:
+            print >> f, identify_worker(wid)
+    end = time()
+    total = end - start
+    print '%d seconds elapsed' % total
+
 if __name__ == '__main__':
-    main()
+    #main()
+    nonasync_main()
