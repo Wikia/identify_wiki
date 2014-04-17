@@ -60,7 +60,7 @@ def identify_subject(wid, terms_only=False):
         'top_categories': Field(
             response.get('top_categories_txt'), TEXT, TF, 1),
         'title_tag': Field(
-            guess_from_title(response.get('wiki_pagetitle_txt', [])[0]),
+            guess_from_title(response.get('wiki_pagetitle_txt', [''])[0]),
             TEXT, BINARY, 4)
         }
 
