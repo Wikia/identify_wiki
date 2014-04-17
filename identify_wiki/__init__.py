@@ -104,6 +104,7 @@ def identify_subject(wid, terms_only=False):
 
     if terms_only:
         return ','.join(top_terms)
+    return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_stemmed))
     return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_terms))
 
 
