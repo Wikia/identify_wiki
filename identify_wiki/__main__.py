@@ -18,6 +18,7 @@ def identify_worker(wid):
         best-matching subjects
     :rtype: string
     """
+    return identify_subject(wid).encode('utf-8')
     try:
         return identify_subject(wid).encode('utf-8')
     except KeyboardInterrupt:
