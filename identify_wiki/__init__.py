@@ -103,14 +103,13 @@ def identify_subject(wid, terms_only=False):
             break
 
     if terms_only:
-        return ','.join(top_terms)
-    return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_terms))
+        return ','.join(top_terms).encode('utf-8')
+    return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_terms)).encode('utf-8')
 
 
 def guess_from_title(title):
     """Given a title, return a list containing a single string representing the
     best guess for the wiki's subject, or an empty list if not possible."""
-    title = title.encode('utf-8')
     print title
     print type(title)
     if title is not None:
