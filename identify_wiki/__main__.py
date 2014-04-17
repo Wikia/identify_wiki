@@ -65,7 +65,7 @@ def nonasync_main():
         wids = [line.strip() for line in
                 open(args.input).readlines()[:args.number]]
         for wid in wids:
-            print >> f, identify_worker(wid)
+            print >> f, identify_subject(wid)
     end = time()
     total = end - start
     print '%d seconds elapsed' % total
