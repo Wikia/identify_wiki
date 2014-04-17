@@ -1,4 +1,4 @@
-from __future__ import division, unicode_literals
+from __future__ import division
 import json
 import requests
 from nlp_services.wikia_utils import main_page_nps, phrases_for_wiki_field
@@ -110,6 +110,7 @@ def identify_subject(wid, terms_only=False):
 def guess_from_title(title):
     """Given a title, return a list containing a single string representing the
     best guess for the wiki's subject, or an empty list if not possible."""
+    title = title.encode('utf-8')
     print title
     print type(title)
     if title is not None:
