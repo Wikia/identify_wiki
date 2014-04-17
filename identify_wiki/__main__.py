@@ -51,7 +51,7 @@ def main():
                 open(args.input).readlines()[:args.number]]
         mapped = Pool(processes=8).map_async(identify_worker, wids)
         mapped.wait()
-        print >> f, '\n'.join([x for x in mapped.get()])
+        print >> f, '\n'.join([x.encode('utf-8') for x in mapped.get()])
     end = time()
     total = end - start
     print '%d seconds elapsed' % total
@@ -71,5 +71,5 @@ def nonasync_main():
     print '%d seconds elapsed' % total
 
 if __name__ == '__main__':
-    #main()
-    nonasync_main()
+    main()
+    #nonasync_main()
