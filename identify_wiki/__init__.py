@@ -110,8 +110,6 @@ def identify_subject(wid, terms_only=False):
 def guess_from_title(title):
     """Given a title, return a list containing a single string representing the
     best guess for the wiki's subject, or an empty list if not possible."""
-    print title
-    print type(title)
     if title is not None:
         low = title.lower()
         right = low.find('wiki')
