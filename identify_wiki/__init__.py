@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, unicode_literals
 import json
 import requests
 from nlp_services.wikia_utils import main_page_nps, phrases_for_wiki_field
@@ -127,5 +127,6 @@ def guess_from_title(title):
                 i = min([(index, len(part)) for (index, part) in
                          enumerate(parts)], key=lambda x: x[1])[0]
                 title = parts[i]
-            return [title.strip().encode('utf-8')]
+            return [title.strip()]
+            #return [title.strip().encode('utf-8')]
     return []
