@@ -103,8 +103,8 @@ def identify_subject(wid, terms_only=False):
             break
 
     if terms_only:
-        return ','.join(top_terms).encode('utf-8')
-    return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_terms)).encode('utf-8')
+        return ','.join(top_terms)
+    return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_terms))
 
 
 def guess_from_title(title):
