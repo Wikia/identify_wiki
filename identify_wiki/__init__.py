@@ -104,7 +104,9 @@ def identify_subject(wid, terms_only=False):
 
     if terms_only:
         return ','.join(top_terms)
-    return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(['_'.join(terms) for terms in top_stemmed]))
+    #return '%s,%s,%s' % (
+    #    wid, response.get('hostname_s'), ','.join(
+    #        ['_'.join(terms) for terms in top_stemmed]))  # DEBUG
     return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_terms))
 
 
@@ -127,5 +129,4 @@ def guess_from_title(title):
                          enumerate(parts)], key=lambda x: x[1])[0]
                 title = parts[i]
             return [title.strip()]
-            #return [title.strip().encode('utf-8')]
     return []
