@@ -19,7 +19,7 @@ def identify_worker(wid):
     :rtype: string
     """
     try:
-        return identify_subject(wid).encode('utf-8')
+        return identify_subject(wid)
     except KeyboardInterrupt:
         sys.exit(0)
     except:
@@ -40,6 +40,20 @@ def get_args():
     return parser.parse_args()
 
 
+def nonasync_main():
+    args = get_args()
+
+    start = time()
+    with open(args.output, 'w') as f:
+        wids = [line.strip() for line in
+                open(args.input).readlines()[:args.number]]
+        for wid in wids:
+            print >> f, identify_subject(wid).encode('utf-8')
+    end = time()
+    total = end - start
+    print '%d seconds elapsed' % total
+
+
 def main():
     args = get_args()
 
@@ -49,7 +63,7 @@ def main():
                 open(args.input).readlines()[:args.number]]
         mapped = Pool(processes=8).map_async(identify_worker, wids)
         mapped.wait()
-        print >> f, '\n'.join([x for x in mapped.get()])
+        print >> f, '\n'.join([x.encode('utf-8') for x in mapped.get()])
     end = time()
     total = end - start
     print '%d seconds elapsed' % total

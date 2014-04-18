@@ -4,7 +4,6 @@ import requests
 from nlp_services.wikia_utils import main_page_nps, phrases_for_wiki_field
 
 from scoring import Field
-from scraping import guess_from_title_tag
 from preprocessing import build_dict_with_original_values
 
 # For ease of Field configuration
@@ -35,7 +34,7 @@ def identify_subject(wid, terms_only=False):
     # Request data from Solr
     params = {'q': 'id:%s' % wid,
               'fl': 'url,hostname_s,domains_txt,top_articles_txt,' +
-                    'top_categories_txt',
+                    'top_categories_txt,wiki_pagetitle_txt',
               'wt': 'json'}
 
     r = requests.get(SOLR_ENDPOINT, params=params)
@@ -51,16 +50,18 @@ def identify_subject(wid, terms_only=False):
     fields = {
         'hostname': Field(response.get('hostname_s'), URL, BINARY, 2),
         'domains': Field(response.get('domains_txt'), URL, TF, 1),
-        'sitename': Field(phrases_for_wiki_field(wid, 'sitename_txt'), TEXT,
-                          BINARY, 1),
-        'headline': Field(phrases_for_wiki_field(wid, 'headline_txt'), TEXT,
-                          BINARY, 1),
-        'description': Field(phrases_for_wiki_field(wid, 'description_txt'),
-                             TEXT, TF, 1),
+        'sitename': Field(
+            phrases_for_wiki_field(wid, 'sitename_txt'), TEXT, BINARY, 1),
+        'headline': Field(
+            phrases_for_wiki_field(wid, 'headline_txt'), TEXT, BINARY, 1),
+        'description': Field(
+            phrases_for_wiki_field(wid, 'description_txt'), TEXT, TF, 1),
         'top_titles': Field(response.get('top_articles_txt'), TEXT, TF, 1),
-        'top_categories': Field(response.get('top_categories_txt'), TEXT,
-                                TF, 1),
-        'title_tag': Field(guess_from_title_tag(wid), TEXT, BINARY, 4)
+        'top_categories': Field(
+            response.get('top_categories_txt'), TEXT, TF, 1),
+        'title_tag': Field(
+            guess_from_title(response.get('wiki_pagetitle_txt', [''])[0]),
+            TEXT, BINARY, 4)
         }
 
     # Build dictionary w/ preprocessed candidate keys and original term values
@@ -103,5 +104,29 @@ def identify_subject(wid, terms_only=False):
 
     if terms_only:
         return ','.join(top_terms)
-    return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(['_'.join(terms) for terms in top_stemmed]))
+    #return '%s,%s,%s' % (
+    #    wid, response.get('hostname_s'), ','.join(
+    #        ['_'.join(terms) for terms in top_stemmed]))  # DEBUG
     return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_terms))
+
+
+def guess_from_title(title):
+    """Given a title, return a list containing a single string representing the
+    best guess for the wiki's subject, or an empty list if not possible."""
+    if title is not None:
+        low = title.lower()
+        right = low.find('wiki')
+        if right > 0:
+            title = title[:right]
+            low = low[:right]
+            left = low.find('the ')
+            if left > -1:
+                title = title[left+4:]
+                low = low[left+4:]
+            if ' - ' in title:
+                parts = title.split(' - ')
+                i = min([(index, len(part)) for (index, part) in
+                         enumerate(parts)], key=lambda x: x[1])[0]
+                title = parts[i]
+            return [title.strip()]
+    return []
