@@ -103,11 +103,21 @@ def identify_subject(wid, terms_only=False):
             break
 
     if terms_only:
-        return ','.join(top_terms)
-    #return '%s,%s,%s' % (
-    #    wid, response.get('hostname_s'), ','.join(
-    #        ['_'.join(terms) for terms in top_stemmed]))  # DEBUG
+        return top_terms
     return '%s,%s,%s' % (wid, response.get('hostname_s'), ','.join(top_terms))
+
+
+def get_subject_list(wid):
+    """
+    Get a list of subjects most likely to represent the content of a wiki.
+
+    :param wid: The wiki ID for which to identify a subject
+    :type wid: string
+
+    :return: A list of best-matching subjects
+    :rtype: list
+    """
+    return identify_subject(wid, terms_only=True)
 
 
 def guess_from_title(title):
